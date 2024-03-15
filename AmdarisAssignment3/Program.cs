@@ -14,3 +14,8 @@ var passenger2 = userService.FindUser("p2.example@gmail.com");
 rideService.CreateRide(  "Comrat", owner: driver, destinationTo: "Chisinau", availableSeats: 1);
 rideService.CreateRide(  "Cahul", owner: driver, destinationTo: "Chisinau");
 
+var ride1 = rideService.FindRide(1);
+var ride2 = ride1.Clone();
+
+Console.WriteLine(ride1 == ride2);
+
