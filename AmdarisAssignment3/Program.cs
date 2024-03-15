@@ -14,8 +14,17 @@ var passenger2 = userService.FindUser("p2.example@gmail.com");
 rideService.CreateRide(  "Comrat", owner: driver, destinationTo: "Chisinau", availableSeats: 1);
 rideService.CreateRide(  "Cahul", owner: driver, destinationTo: "Chisinau");
 
+rideService.BookRide(passenger1, 1);
+rideService.BookRide(passenger2, 1);
+
 var ride1 = rideService.FindRide(1);
 var ride2 = ride1.Clone();
 
-Console.WriteLine(ride1 == ride2);
+Console.WriteLine(ride1 == ride2); // IClonable
+
+Console.WriteLine("Passengers in the ride:");
+foreach (var passenger in ride1)
+{
+    Console.WriteLine("User " + passenger.Name + " is in the ride."); //IEnumerable
+}
 

@@ -1,6 +1,8 @@
+using System.Collections;
+
 namespace AmdarisAssignment3.Model;
 
-public class Ride : ICloneable
+public class Ride : ICloneable, IEnumerable<User>
 {
     public required int Id { get; init; }
     public required string DestinationFrom { get; set; }
@@ -11,5 +13,15 @@ public class Ride : ICloneable
     public object Clone()
     {
         return this.MemberwiseClone();
+    }
+
+    public IEnumerator<User> GetEnumerator()
+    {
+        return Passengers.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }
