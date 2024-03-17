@@ -1,0 +1,15 @@
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/bin/Debug/net8.0/AmdarisAssignment5
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/bin/Debug/net8.0/AmdarisAssignment5.deps.json
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/bin/Debug/net8.0/AmdarisAssignment5.runtimeconfig.json
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/bin/Debug/net8.0/AmdarisAssignment5.dll
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/bin/Debug/net8.0/AmdarisAssignment5.pdb
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.GeneratedMSBuildEditorConfig.editorconfig
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.AssemblyInfoInputs.cache
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.AssemblyInfo.cs
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.csproj.CoreCompileInputs.cache
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.sourcelink.json
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.dll
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/refint/AmdarisAssignment5.dll
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.pdb
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/AmdarisAssignment5.genruntimeconfig.cache
+/home/maria/Downloads/AmdarisAssignment3/AmdarisAssignment5/obj/Debug/net8.0/ref/AmdarisAssignment5.dll
