@@ -2,9 +2,8 @@ using System.Collections;
 
 namespace AmdarisAssignment3.Model;
 
-public class Ride : ICloneable, IEnumerable<User>
+public class Ride : Entity, ICloneable, IEnumerable<User>
 {
-    public required int Id { get; init; }
     public required string DestinationFrom { get; set; }
     public required string DestinationTo { get; set; }
     public required int AvailableSeats { get; set; }

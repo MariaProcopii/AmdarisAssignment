@@ -1,23 +1,29 @@
 namespace AmdarisAssignment3.Service;
+using Repository;
 using Model;
 
 public class UserService : IUserService
 {
-    private readonly List<User> _users = new List<User>();
+    private readonly IRepository<User> _userRepository;
+
+    public UserService(IRepository<User> userRepository)
+    {
+        _userRepository = userRepository;
+    }
     
     public User? FindUser(int id)
     {
-        return _users.FirstOrDefault(u => u.Id == id);
+        return _userRepository.GetById(id);
     }
 
     public User? FindUser(string email)
     {
-        return _users.Find(u => u.Email == email);
+        return _userRepository.GetAll().Find(u => u.Email == email);
     }
 
     public List<User> FindAll()
     {
-        return _users;
+        return _userRepository.GetAll();
     }
 
     public void CreateUser(string name, string email, string paymentMethod)
@@ -29,7 +35,7 @@ public class UserService : IUserService
             Email = email,
             Id = GenerateNewId()
         };
-        _users.Add(newUser);
+        _userRepository.Create(newUser);
         Console.WriteLine("Passenger was created");
     }
     
@@ -43,38 +49,22 @@ public class UserService : IUserService
             Email = email,
             Id = GenerateNewId()
         };
-        _users.Add(newUser);
+        _userRepository.Create(newUser);
         Console.WriteLine("Driver was created");
     }
 
     public void Update(int id, User updatedUser)
     {
-        var index = _users.FindIndex(u => u.Id == id);
-        if (index != -1)
-        {
-            _users[index] = updatedUser;
-        }
-        else
-        {
-            Console.WriteLine("User not found.");
-        }
+        _userRepository.Update(id, updatedUser);
     }
 
     public void Delete(int id)
     {
-        User? userToRemove = FindUser(id);
-        if (userToRemove != null)
-        {
-            _users.Remove(userToRemove);
-        }
-        else
-        {
-            Console.WriteLine("User not found.");
-        }
+        _userRepository.Delete(id);
     }
     
     private int GenerateNewId()
     {
-        return _users.Count != 0 ? _users.Max(u => u.Id) + 1 : 0;
+        return _userRepository.GetAll().Count != 0 ? _userRepository.GetAll().Max(u => u.Id) + 1 : 0;
     }
 }

@@ -1,7 +1,9 @@
-﻿using AmdarisAssignment3.Service;
+﻿using AmdarisAssignment3.Model;
+using AmdarisAssignment3.Service;
+using AmdarisAssignment3.Repository;
 
-var rideService = new RideService();
-var userService = new UserService();
+var rideService = new RideService(new InMemoryRepository<Ride>());
+var userService = new UserService(new InMemoryRepository<User>());
 
 userService.CreateUser("Passenger1", "p1.example@gmail.com", "Card");
 userService.CreateUser("Passenger2", "p2.example@gmail.com", "Card");

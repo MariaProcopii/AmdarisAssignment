@@ -1,8 +1,7 @@
 namespace AmdarisAssignment3.Model;
 
-public abstract class User
+public abstract class User : Entity
 {
-    public required int Id { get; init; }
     public required string Name { get; set; }
     public required string Email { get; set; }
 

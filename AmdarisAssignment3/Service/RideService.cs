@@ -1,13 +1,19 @@
-using AmdarisAssignment3.Model;
 namespace AmdarisAssignment3.Service;
+using Repository;
+using Model;
 
 public class RideService
 {
-    private readonly List<Ride> _rides = new List<Ride>();
+    private readonly IRepository<Ride> _rideRepository;
+
+    public RideService(IRepository<Ride> rideRepository)
+    {
+        _rideRepository = rideRepository;
+    }
     
     public Ride? FindRide(int rideId)
     {
-        return _rides.FirstOrDefault(r => r.Id == rideId);
+        return _rideRepository.GetById(rideId);
     }
 
     public void CreateRide(string destinationFrom, string destinationTo, User? owner, int availableSeats = 3)
@@ -22,7 +28,7 @@ public class RideService
                 AvailableSeats = availableSeats,
                 Owner = driver
             };
-            _rides.Add(newRide);
+            _rideRepository.Create(newRide);
             driver.CreatedRides.Add(newRide);
             Console.WriteLine("Ride was created");
         }
@@ -32,15 +38,9 @@ public class RideService
         }
     }
 
-    public Ride? DeleteRide(int rideId)
+    public void DeleteRide(int rideId)
     {
-        Ride? rideToDelete = FindRide(rideId);
-        if (rideToDelete is not null)
-        {
-            _rides.Remove(rideToDelete);
-        }
-        
-        return rideToDelete;
+        _rideRepository.Delete(rideId);
     }
     
     public void BookRide(User user, int rideId)
@@ -52,13 +52,22 @@ public class RideService
             {
                 (user as Passenger)?.BookRides.Add(ride);
                 ride.Passengers.Add(user);
+                ride.AvailableSeats--;
                 Console.WriteLine("Ride was booked");
             }
+            else
+            {
+                Console.WriteLine("No available seats for this ride.");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Invalid ride or user type.");
         }
     }
 
     private int GenerateNewId()
     {
-        return _rides.Count != 0 ? _rides.Max(r => r.Id) + 1 : 0;
+        return _rideRepository.GetAll().Count != 0 ? _rideRepository.GetAll().Max(u => u.Id) + 1 : 0;
     }
 }
