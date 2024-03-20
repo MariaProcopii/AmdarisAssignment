@@ -23,4 +23,13 @@ public class Ride : Entity, ICloneable, IEnumerable<User>
     {
         return GetEnumerator();
     }
+    
+    public override string ToString()
+    {
+        return $"====Ride Details====\n" +
+               $"Destination: {DestinationFrom} to {DestinationTo}\n" +
+               $"Available Seats: {AvailableSeats}\n" +
+               $"Owner: {Owner.Name}\n" +
+               $"Passengers: {string.Join(", ", Passengers)}\n";
+    }
 }

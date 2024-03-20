@@ -13,7 +13,17 @@ public class UserService : IUserService
     
     public User? FindUser(int id)
     {
-        return _userRepository.GetById(id);
+        User? user = null;
+        try
+        {
+            user = _userRepository.GetById(id);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
+        return user;
     }
 
     public User? FindUser(string email)
@@ -23,7 +33,14 @@ public class UserService : IUserService
 
     public List<User> FindAll()
     {
-        return _userRepository.GetAll();
+        var users = _userRepository.GetAll();
+#if(DEBUG)
+        foreach (var user in users)
+        {
+            user.DisplayInfo();
+        }
+#endif
+        return users;
     }
 
     public void CreateUser(string name, string email, string paymentMethod)
@@ -55,12 +72,36 @@ public class UserService : IUserService
 
     public void Update(int id, User updatedUser)
     {
-        _userRepository.Update(id, updatedUser);
+        try
+        {
+            _userRepository.Update(id, updatedUser);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+        catch (ArgumentNullException ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
     }
 
     public void Delete(int id)
     {
-        _userRepository.Delete(id);
+        try
+        {
+            _userRepository.Delete(id);
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            Console.WriteLine("Some logic of finally block like a db connection closure");
+        }
     }
     
     private int GenerateNewId()

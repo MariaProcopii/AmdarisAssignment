@@ -16,6 +16,18 @@ public class RideService
         return _rideRepository.GetById(rideId);
     }
 
+    public Ride? FindRide(RideCompare rideCompare, string compareArg)
+    {
+        foreach(var ride in _rideRepository.GetAll())
+        {
+            if (rideCompare(ride, compareArg))
+            {
+                return ride;
+            }
+        }
+        return null;
+    }
+
     public void CreateRide(string destinationFrom, string destinationTo, User? owner, int availableSeats = 3)
     {
         if (owner is Driver driver)

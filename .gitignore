@@ -1,0 +1,11 @@
+.idea/
+*.sln
+*.user
+*.dll
+*.exe
+AmdarisAssignment3/bin/
+AmdarisAssignment5/bin/
+AmdarisAssignment3/obj/
+AmdarisAssignment3/obj/
+AmdarisAssignment3/*.csproj
+AmdarisAssignment5/*.csproj

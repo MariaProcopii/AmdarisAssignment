@@ -1,4 +1,5 @@
 using AmdarisAssignment3.Model;
+using AmdarisAssignment3.Exceptions;
 
 namespace AmdarisAssignment3.Repository;
 
@@ -8,6 +9,11 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
 
     public T? GetById(int id)
     {
+        if (id < 0)
+        {
+            throw new ArgumentOutOfRangeException(nameof(id), "Id must be greater or equal to zero.");
+        }
+
         return _entities.FirstOrDefault(e => e.Id == id);
     }
 
@@ -18,11 +24,19 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
 
     public void Create(T entity)
     {
+        if (entity is null)
+        {
+            throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
+        }
         _entities.Add(entity);
     }
 
     public void Update(int id, T entity)
     {
+        if (entity is null)
+        {
+            throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
+        }
         var existingEntity = GetById(id);
         if (existingEntity is not null)
         {
@@ -31,7 +45,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
         }
         else
         {
-            throw new ArgumentException("Entity not found.");
+            throw new EntityNotFoundException("Entity not found.");
         }
     }
 
@@ -44,7 +58,7 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
         }
         else
         {
-            throw new ArgumentException("Entity not found.");
+            throw new EntityNotFoundException("Entity not found.");
         }
     }
 }
