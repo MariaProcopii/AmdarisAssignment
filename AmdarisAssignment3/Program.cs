@@ -40,9 +40,7 @@ public class Program
         rideService.BookRide(passenger2, 2);
         
         //Exception Handling
-        var user = userService.FindUser(-1);
-        user.DisplayInfo();
-        
+        userService.FindUser(10);
         userService.FindAll();
         
         //manipulate collection via delegate
@@ -83,7 +81,7 @@ public class Program
                    .OrderBy(user => user.Name)
                    .ToList()
                    .ForEach(user => user.DisplayInfo());
-
+        
         userService.FindAll()
                    .Select(user => user.Name)
                    .Take(2)

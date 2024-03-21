@@ -7,14 +7,14 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
 {
     private readonly List<T> _entities = new List<T>();
 
-    public T? GetById(int id)
+    public T GetById(int id)
     {
         if (id < 0)
         {
             throw new ArgumentOutOfRangeException(nameof(id), "Id must be greater or equal to zero.");
         }
-
-        return _entities.FirstOrDefault(e => e.Id == id);
+        var entity = _entities.FirstOrDefault(e => e.Id == id);
+        return entity ?? throw new EntityNotFoundException("Entity not found.");
     }
 
     public List<T> GetAll()
@@ -38,27 +38,14 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
             throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
         }
         var existingEntity = GetById(id);
-        if (existingEntity is not null)
-        {
-            var index = _entities.IndexOf(existingEntity);
-            _entities[index] = entity;
-        }
-        else
-        {
-            throw new EntityNotFoundException("Entity not found.");
-        }
+        
+        var index = _entities.IndexOf(existingEntity);
+        _entities[index] = entity;
     }
 
     public void Delete(int id)
     {
         var entityToDelete = GetById(id);
-        if (entityToDelete is not null)
-        {
-            _entities.Remove(entityToDelete);
-        }
-        else
-        {
-            throw new EntityNotFoundException("Entity not found.");
-        }
+        _entities.Remove(entityToDelete);
     }
 }

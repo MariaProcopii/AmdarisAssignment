@@ -1,4 +1,5 @@
 namespace AmdarisAssignment3.Service;
+using Exceptions;
 using Repository;
 using Model;
 
@@ -19,6 +20,10 @@ public class UserService : IUserService
             user = _userRepository.GetById(id);
         }
         catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        catch (EntityNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
         }
@@ -82,6 +87,11 @@ public class UserService : IUserService
             throw;
         }
         catch (ArgumentNullException ex)
+        {
+            Console.WriteLine(ex.Message);
+            throw;
+        }
+        catch (EntityNotFoundException ex)
         {
             Console.WriteLine(ex.Message);
             throw;
