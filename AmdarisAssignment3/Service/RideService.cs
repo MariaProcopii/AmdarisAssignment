@@ -16,6 +16,11 @@ public class RideService
         return _rideRepository.GetById(rideId);
     }
 
+    public List<Ride> FindAll()
+    {
+        return _rideRepository.GetAll();
+    }
+
     public Ride? FindRide(RideCompare rideCompare, string compareArg)
     {
         foreach(var ride in _rideRepository.GetAll())

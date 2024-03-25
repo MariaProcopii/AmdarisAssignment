@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("AmdarisAssignment5")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cf4be58fa1542f0660a46a85082f2df6c43791d7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d38f8616b759aaa341b63ccd012afc8c1c0069bd")]
 [assembly: System.Reflection.AssemblyProductAttribute("AmdarisAssignment5")]
 [assembly: System.Reflection.AssemblyTitleAttribute("AmdarisAssignment5")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

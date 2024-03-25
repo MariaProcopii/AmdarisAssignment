@@ -96,6 +96,10 @@ public class UserService : IUserService
             Console.WriteLine(ex.Message);
             throw;
         }
+        finally
+        {
+            Console.WriteLine("hi");
+        }
     }
 
     public void Delete(int id)
