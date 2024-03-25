@@ -84,7 +84,7 @@ public class Program
         //Grouping Operators
         var enumerable10 = userService.FindAll().GroupBy(user => user.Name);
         var enumerable11 = userService.FindAll().ToLookup(user => user.Name);
-        
+
         //Conversion Operators
         var enumerable12 = rideService.FindAll().Select(ride => ride.Owner).Cast<Driver>();
         var enumerable13 = userService.FindAll().Select(user => user.Id).ToList();
