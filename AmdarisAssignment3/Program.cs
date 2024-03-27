@@ -43,6 +43,5 @@ public class Program
         await rideService.BookRide(passenger1, 0);
         await rideService.BookRide(passenger2, 0);
         await rideService.BookRide(passenger2, 2);
-
     }
 }

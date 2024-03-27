@@ -21,7 +21,7 @@ public class UserService : IUserService
         try
         {
             user = _userRepository.GetById(id);
-            await _logger.LogMessage(nameof(FindUser), "Success");
+             await _logger.LogMessage(nameof(FindUser), "Success");
         }
         catch (ArgumentOutOfRangeException ex)
         {
