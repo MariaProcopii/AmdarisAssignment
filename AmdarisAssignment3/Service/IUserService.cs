@@ -4,11 +4,11 @@ using Model;
 public interface IUserService
 {
 
-    User? FindUser(int id);
-    User? FindUser(string email);
-    List<User> FindAll();
-    void CreateUser(string name, string email, string preferredPaymentMethod);
-    void CreateUser(string name, string email, string carModel, string licenseNumber);
-    void Update(int id, User updatedPerson);
-    void Delete(int id);
+    Task<User?> FindUser(int id);
+    Task<User?> FindUser(string email);
+    Task<List<User>> FindAll();
+    Task CreateUser(string name, string email, string preferredPaymentMethod);
+    Task CreateUser(string name, string email, string carModel, string licenseNumber);
+    Task Update(int id, User updatedPerson);
+    Task Delete(int id);
 }

@@ -1,39 +1,63 @@
 namespace AmdarisAssignment3.Service;
 using Repository;
 using Model;
+using Logger;
+using Exceptions;
 
 public class RideService
 {
     private readonly IRepository<Ride> _rideRepository;
+    private readonly FileLogger _logger;
 
-    public RideService(IRepository<Ride> rideRepository)
+    public RideService(IRepository<Ride> rideRepository, FileLogger logger)
     {
         _rideRepository = rideRepository;
+        _logger = logger;
     }
     
-    public Ride? FindRide(int rideId)
+    public async Task<Ride?> FindRide(int rideId)
     {
-        return _rideRepository.GetById(rideId);
-    }
-
-    public List<Ride> FindAll()
-    {
-        return _rideRepository.GetAll();
-    }
-
-    public Ride? FindRide(RideCompare rideCompare, string compareArg)
-    {
-        foreach(var ride in _rideRepository.GetAll())
+        Ride? ride = null;
+        try
         {
-            if (rideCompare(ride, compareArg))
-            {
-                return ride;
-            }
+            ride = _rideRepository.GetById(rideId);
+            await _logger.LogMessage(nameof(FindRide), "Success");
         }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+            await _logger.LogMessage(nameof(FindRide), "Failure");
+            throw;
+        }
+        catch (EntityNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+            await _logger.LogMessage(nameof(FindRide), "Failure");
+            throw;
+        }
+
+        return ride;
+    }
+
+    public async Task<List<Ride>> FindAll()
+    {
+        var rides = _rideRepository.GetAll();
+        await _logger.LogMessage(nameof(FindAll), "Success");
+        return rides;
+    }
+
+    public async Task<Ride?> FindRide(RideCompare rideCompare, string compareArg)
+    {
+        foreach (var ride in _rideRepository.GetAll().Where(ride => rideCompare(ride, compareArg)))
+        {
+            await _logger.LogMessage(nameof(FindRide), "Success");
+            return ride;
+        }
+        await _logger.LogMessage(nameof(FindRide), "Failure");
         return null;
     }
 
-    public void CreateRide(string destinationFrom, string destinationTo, User? owner, int availableSeats = 3)
+    public async Task CreateRide(string destinationFrom, string destinationTo, User? owner, int availableSeats = 3)
     {
         if (owner is Driver driver)
         {
@@ -47,39 +71,58 @@ public class RideService
             };
             _rideRepository.Create(newRide);
             driver.CreatedRides.Add(newRide);
+            await _logger.LogMessage(nameof(CreateRide), "Success");
             Console.WriteLine("Ride was created");
         }
         else
         {
+            await _logger.LogMessage(nameof(FindRide), "Failure");
             Console.WriteLine("You're not allowed to create a ride");
         }
     }
 
-    public void DeleteRide(int rideId)
+    public async Task DeleteRide(int rideId)
     {
-        _rideRepository.Delete(rideId);
+        try
+        {
+            _rideRepository.Delete(rideId);
+            await _logger.LogMessage(nameof(DeleteRide), "Success");
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);
+            await _logger.LogMessage(nameof(DeleteRide), "Failure");
+        }
+        catch (EntityNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+            await _logger.LogMessage(nameof(DeleteRide), "Failure");
+        }
     }
     
-    public void BookRide(User user, int rideId)
+    public async Task BookRide(User user, int rideId)
     {
-        var ride = FindRide(rideId);
-        if (ride is not null && user is Passenger)
+        var ride = await FindRide(rideId);
+        if (ride is not null && user is Passenger passenger)
         {
             if (ride.AvailableSeats > 0)
             {
-                (user as Passenger)?.BookRides.Add(ride);
-                ride.Passengers.Add(user);
+                passenger?.BookRides.Add(ride);
+                ride.Passengers.Add(passenger);
                 ride.AvailableSeats--;
                 Console.WriteLine("Ride was booked");
+                await _logger.LogMessage(nameof(BookRide), "Success");
             }
             else
             {
                 Console.WriteLine("No available seats for this ride.");
+                await _logger.LogMessage(nameof(BookRide), "Failure");
             }
         }
         else
         {
             Console.WriteLine("Invalid ride or user type.");
+            await _logger.LogMessage(nameof(BookRide), "Failure");
         }
     }
 
