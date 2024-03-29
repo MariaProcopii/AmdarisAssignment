@@ -3,7 +3,7 @@
 *.user
 *.dll
 *.exe
-AmdarisAssignment*/bin/
-AmdarisAssignment*/obj/
-AmdarisAssignment*/*.csproj
+*/bin/
+*/obj/
+*/*.csproj
 AmdarisAssignment10/appsettings.json

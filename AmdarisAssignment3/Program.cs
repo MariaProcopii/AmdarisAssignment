@@ -25,7 +25,7 @@ public class Program
         var logger = new FileLogger(logDirectory);
         var rideService = new RideService(new InMemoryRepository<Ride>(), logger);
         var userService = new UserService(new InMemoryRepository<User>(), logger);
-
+        await DoSomething().ConfigureAwait(true);
         await userService.CreateUser("Ana", "p1.example@gmail.com", "Card");
         await userService.CreateUser("Maria", "p2.example@gmail.com", "Card");
         await userService.CreateUser("Maria", "p2.example@gmail.com", "Card");
@@ -43,5 +43,10 @@ public class Program
         await rideService.BookRide(passenger1, 0);
         await rideService.BookRide(passenger2, 0);
         await rideService.BookRide(passenger2, 2);
+    }
+
+    private static Task DoSomething()
+    {
+        return Task.Run(() => { Console.WriteLine("ll"); });
     }
 }
