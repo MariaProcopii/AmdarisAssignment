@@ -1,23 +1,32 @@
 using AmdarisAssignment15.Model;
 using AmdarisAssignment15.Enum;
+using AmdarisAssignment15.Exception;
+using AmdarisAssignment15.Repository;
 
 namespace AmdarisAssignment15.Service;
 
-public class OrderService
+public class OrderService : IOrderService
 {
-    private readonly List<Order> _orders = [];
-    
-    public Order FindOrder(Guid orderId)
+    private readonly IOrderRepository _orderRepository;
+    private readonly IEmployeeRepository _employeeRepository;
+
+    public OrderService(IOrderRepository orderRepository, IEmployeeRepository employeeRepository)
     {
-        return _orders.First(order => orderId == order.OrderId);
+        _orderRepository = orderRepository;
+        _employeeRepository = employeeRepository;
     }
 
-    public Guid CreateOrder(List<Product> products, List<Subscriber> subscribers)
+    public Order FindOrder(Guid orderId)
     {
-        var orderId = Guid.NewGuid();
-        var order = new Order(orderId, products);
-        _orders.Add(order);
-        Subscribe(orderId, subscribers);
+        return _orderRepository.FindOrder(orderId);
+    }
+
+    public Guid CreateOrder(List<Product> products, Customer customer)
+    {
+        var order = new Order(Guid.NewGuid(), products);
+        var orderId = _orderRepository.AddOrder(order);
+        var customerList = new List<Subscriber> { customer };
+        Subscribe(orderId,customerList);
         order.Notify();
 
         return orderId;
@@ -28,28 +37,62 @@ public class OrderService
         var order = FindOrder(orderId);
         foreach (var subscriber in subscribers)
         {
+            if (subscriber is Employee employee)
+            {
+                employee.Status = EmployeeStatus.BUSY;
+            }
             order.Subscribe(subscriber);
             Console.WriteLine($"{subscriber.GetType().Name} {subscriber.Name} has been attached to the order [{orderId}]");
         }
     }
 
-    public void Unsubscribe(Subscriber subscriber, Guid orderId)
+    public void Unsubscribe(List<Subscriber> subscribers, Guid orderId)
     {
         var order = FindOrder(orderId);
-        order.Unsubscribe(subscriber);
-        Console.WriteLine($"{subscriber.GetType().Name} {subscriber.Name} has been removed from the order [{orderId}]");
+        foreach (var subscriber in subscribers)
+        {
+            if (subscriber is Employee employee)
+            {
+                employee.Status = EmployeeStatus.FREE;
+            }
+            order.Unsubscribe(subscriber);
+            Console.WriteLine($"{subscriber.GetType().Name} {subscriber.Name} has been removed from the order [{orderId}]");
+        }
     }
 
-    public void ProcessOrder(Guid orderId)
+    public void ProcessOrder(Guid orderId, int numberOfEmployees = 1)
     {
         var order = FindOrder(orderId);
+        var availableEmployees = _employeeRepository.GetAvailableEmployeesForProcessing(numberOfEmployees);
+
+        if (availableEmployees.Count == 0)
+        {
+            throw new NoAvailableEmployeesException("No employee available for processing");
+        }
+        var subscribers = availableEmployees.Cast<Subscriber>().ToList();
+        Subscribe(orderId, subscribers);
         order.Status = OrderStatus.PROCESSING;
         order.Notify();
     }
 
-    public void GetTheOrderReadyForShipping(Guid orderId)
+    public void GetTheOrderReadyForShipping(Guid orderId, int numberOfEmployees = 1)
     {
         var order = FindOrder(orderId);
+        var processingSubscribers = order.Subscribers
+            .OfType<Employee>()
+            .Where(employee => employee.Position == EmployeePosition.PROCESSING)
+            .Cast<Subscriber>().ToList();
+        
+        Unsubscribe(processingSubscribers, orderId);
+        var availableEmployees = _employeeRepository.GetAvailableEmployeesForDelivery(numberOfEmployees);
+
+        if (availableEmployees.Count == 0)
+        {
+            throw new NoAvailableEmployeesException("No employee available for delivery");
+        }
+        
+        var subscribers = availableEmployees.Cast<Subscriber>().ToList();
+        Subscribe(orderId, subscribers);
         order.Status = OrderStatus.READY_FOR_SHIPPING;
         order.Notify();
     }
