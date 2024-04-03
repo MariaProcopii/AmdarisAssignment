@@ -7,9 +7,9 @@ using Logger;
 public class UserService : IUserService
 {
     private readonly IRepository<User> _userRepository;
-    private readonly FileLogger _logger;
+    private readonly ILogger _logger;
 
-    public UserService(IRepository<User> userRepository, FileLogger logger)
+    public UserService(IRepository<User> userRepository, ILogger logger)
     {
         _userRepository = userRepository;
         _logger = logger;
@@ -47,6 +47,11 @@ public class UserService : IUserService
             await _logger.LogMessage(nameof(FindUser), "Success");
         }
         catch (EntityNotFoundException ex)
+        {
+            Console.WriteLine(ex.Message);
+            await _logger.LogMessage(nameof(FindUser), "Failure");
+        }
+        catch(NullReferenceException ex)
         {
             Console.WriteLine(ex.Message);
             await _logger.LogMessage(nameof(FindUser), "Failure");
@@ -148,7 +153,7 @@ public class UserService : IUserService
         }
     }
     
-    private int GenerateNewId()
+    public int GenerateNewId()
     {
         return _userRepository.GetAll().Count != 0 ? _userRepository.GetAll().Max(u => u.Id) + 1 : 0;
     }

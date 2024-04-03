@@ -1,6 +1,6 @@
 namespace AmdarisAssignment3.Logger;
 
-public class FileLogger
+public class FileLogger : ILogger
 {
     private readonly string _logDirectory;
 

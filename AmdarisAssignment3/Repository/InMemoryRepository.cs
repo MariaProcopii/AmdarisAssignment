@@ -24,9 +24,20 @@ public class InMemoryRepository<T> : IRepository<T> where T : Entity
 
     public void Create(T entity)
     {
-        if (entity is null)
+        if (entity is Passenger passenger)
         {
-            throw new ArgumentNullException(nameof(entity), "Entity cannot be null.");
+            if (passenger.Name == null || passenger.Email == null || passenger.PaymentMethod == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "Passenger fields cannot be null.");
+            }
+        }
+        
+        if (entity is Driver driver)
+        {
+            if (driver.Name == null || driver.Email == null || driver.CarModel == null || driver.LicenseNumber == null)
+            {
+                throw new ArgumentNullException(nameof(entity), "Driver fields cannot be null.");
+            }
         }
         _entities.Add(entity);
     }
